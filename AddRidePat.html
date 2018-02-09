@@ -1,0 +1,338 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" /> 
+    <title></title>
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="ajaxCalls.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script>
+        function destinationList() {
+            var p = "";
+            request = {
+                prefix: p
+            }
+
+            getDestAjax(request, getdestSuccess, getdestFailure);
+        }
+
+        function getdestSuccess(result) {
+            destinationlist = $.parseJSON(result.d);
+
+            str = "";
+            str += "<option value='' disabled selected>מקום התחלה</option>";
+            str1 = "";
+            str1 += "<option value='' disabled selected>מקום סיום</option>";
+            for (i = 0; i < destinationlist.length; i++) {
+                str += "<option value='" + destinationlist[i].Name + "'>" + destinationlist[i].Name + " </option>";
+                str1 += "<option value='" + destinationlist[i].Name + "'>" + destinationlist[i].Name + " </option>";
+            }
+            document.getElementById("startPlace").innerHTML = str;
+            document.getElementById("finishPlace").innerHTML = str1;
+        }
+
+        function getdestFailure(error) {
+
+        }
+
+
+        $(document).ready(function () {
+            $("#datepicker").datepicker();
+        });
+
+        function Calculateday() {
+            d = new Date(document.getElementById("datepicker").value);
+            dt = d.getDate();
+            mn = d.getMonth();
+            mn++;
+            yy = d.getFullYear();
+            day = d.getDay();
+            var weekday = new Array(7);
+            weekday[0] = "ראשון";
+            weekday[1] = "שני";
+            weekday[2] = "שלישי";
+            weekday[3] = "רביעי";
+            weekday[4] = "חמישי";
+            weekday[5] = "שישי";
+            weekday[6] = "שבת";
+
+            var n = weekday[day];
+            //document.getElementById("ndt").value = dt + "/" + mn + "/" + yy
+            document.getElementById("rideDay").innerHTML = n;
+        }
+
+
+        function escortedList() {
+            var p = document.getElementById("patientName").value;
+            request = {
+                prefix: p
+            }
+
+            getEscortedAjax(request, getEscortedSuccess, getEscortedFailure);
+        }
+
+        function getEscortedSuccess(result) {
+           Escortedlist = $.parseJSON(result.d);
+
+            str = "";
+            str += "<option value='' disabled selected>בחר מלווה</option>";
+            for (i = 0; i < Escortedlist.length; i++) {
+                str += "<option value='" + Escortedlist[i].DisplayName + "'>" + Escortedlist[i].FirstNameH + " " + Escortedlist[i].LastNameH+ " </option>";
+            }
+            document.getElementById("escorted").innerHTML = str;
+
+        }
+
+        function getEscortedFailure(error) {
+
+        }
+
+        function patientList() {
+            var p = "";
+            request = {
+                prefix: p
+            }
+
+            getPatientAjax(request, getpatSuccess, getpatFailure);
+        }
+
+        function getpatSuccess(result) {
+            Patientlist = $.parseJSON(result.d);
+
+            str = "";
+            str += "<option value='' disabled selected>בחר חולה</option>";
+            for (i = 0; i < Patientlist.length; i++) {
+                str += "<option value='" + Patientlist[i].DisplayName + "'>" + Patientlist[i].FirstNameH + " " + Patientlist[i].LastNameH+" </option>";
+            }
+            document.getElementById("patientName").innerHTML = str; 
+
+        }
+
+        function getpatFailure(error) {
+
+        }
+
+        function getAddition() {
+            var p = document.getElementById("patientName").value;
+            request = {
+                prefix: p
+            }
+
+            getAdditionAjax(request, getAddSuccess, getAddFailure);
+        }
+
+        function getAddSuccess(result) {
+            add = $.parseJSON(result.d);
+            document.getElementById("addition").innerHTML = add;
+
+        }
+
+        function getAddFailure(error) {
+
+        }
+
+        function respList() {
+            var p = "רגיל";
+            request = {
+                prefix: p
+            }
+
+            getrespListAjax(request, getresptSuccess, getrespFailure);
+        }
+
+        function getresptSuccess(result) {
+            resplist = $.parseJSON(result.d);
+
+            str = "";
+            str += "<option value='' disabled selected>בחר רכז</option>";
+            for (i = 0; i < resplist.length; i++) {
+                str += "<option value='" + resplist[i].DisplayName + "'>" + resplist[i].FirstNameH + " " + resplist[i].LastNameH +" </option>";
+            }
+            document.getElementById("responsible").innerHTML = str;
+        }
+
+        function getrespFailure(error) {
+
+        }
+
+
+        function insertRidePat() {
+            var type;
+            if (document.getElementById('t1').checked) {
+                type = document.getElementById('t1').value;
+            }
+            else
+                type = document.getElementById('t2').value;
+
+            var pat = document.getElementById("patientName");
+            var patientDisplayName = pat.options[pat.selectedIndex].value;
+
+            var es = document.getElementById("escorted");
+            var escortedDisplayName = es.options[es.selectedIndex].value;
+
+            var start = document.getElementById("startPlace");
+            var startPlace = start.options[start.selectedIndex].value;
+
+            var finish = document.getElementById("finishPlace");
+            var finishPlace = finish.options[finish.selectedIndex].value;
+
+            d = new Date(document.getElementById("datepicker").value);
+            dt = d.getDate();
+            mn = d.getMonth();
+            mn++;
+            yy = d.getFullYear();
+            day = d.getDay();
+
+            var date = yy + "-" + mn + "-" + dt;
+            var day = document.getElementById("rideDay").innerHTML.toString();
+            var h = document.getElementById("hour");
+            var hour = h.options[h.selectedIndex].value;
+
+            var a = document.getElementById("amount");
+            var amount = parseInt(a.options[a.selectedIndex].text);
+
+            var add = document.getElementById("addition").innerHTML.toString();
+            var r = document.getElementById("responsible");
+            var responsible = r.options[r.selectedIndex].value;
+
+            var remarks = document.getElementById("remarks").value;
+
+            var status;
+            if (document.getElementById('s1').checked) {
+                status = document.getElementById('s1').value;
+            }
+            else if (document.getElementById('s2').checked) {
+                status = document.getElementById('s2').value;
+            }
+            else if (document.getElementById('s3').checked) {
+                status = document.getElementById('s3').value;
+            }
+            else if (document.getElementById('s4').checked) {
+                status = document.getElementById('s4').value;
+            }
+            else if (document.getElementById('s5').checked) {
+                status = document.getElementById('s5').value;
+            }
+            else
+                status = document.getElementById('s6').value;
+
+            responsible = { displayName: responsible }
+            patient = { displayName: patientDisplayName }
+            escorted = { displayName: escortedDisplayName }
+            startDes = {
+                Name: startPlace
+            }
+            finishDes = {
+                Name: finishPlace
+            }
+            ridePat = { pat: patient,
+                escorted1 : escorted,
+                startPlace: startDes,
+                target: finishDes,
+                day: day,
+                date: date,
+                leavingHour : hour,
+                quantity : amount,
+                addition : add,
+                rideType : type,
+                coordinator: responsible,
+                remark : remarks,
+                status: status
+            }
+            request = { ridePat: ridePat }
+            insertridePatAjax(request, insertRidePatSuccess, insertRidePatFailure);
+        }
+
+        function insertRidePatSuccess(result) {
+            ridePat = $.parseJSON(result.d);
+            document.getElementById("resultsDiv").innerHTML = "ההסעה הוכנסה בהצלחה למערכת";
+        }
+
+        function insertRidePatFailure(error) {
+
+        }
+
+    </script>
+   
+</head>
+<body dir="rtl" onload="destinationList(); patientList();respList()">
+    <h1>הוספת נסיעת חולה</h1>
+    <table>
+        <tr>
+            <td>שם חולה:</td>
+            <td><select id="patientName" onchange="escortedList();getAddition()"></select></td>
+        </tr>
+        <tr>
+            <td>מקום התחלה:</td>
+            <td><select id="startPlace"></select></td>
+        </tr>
+        <tr>
+            <td>מקום סיום:</td>
+            <td><select id="finishPlace"></select></td>
+        </tr>
+        <tr>
+            <td>סוג הסעה:</td>
+            <td><input type="radio" name="type" id="t1" value="הלוך" checked> הלוך<br>
+                <input type="radio" name="type" id="t2" value="חזור"> חזור<br></td>
+        </tr>
+        <tr>
+            <td>תאריך:</td>
+            <td><input id="datepicker" onchange="Calculateday()"/></td>
+        </tr>
+        <tr>
+            <td>יום:</td>
+            <td id="rideDay"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>שעת נסיעה:</td>
+            <td><select id="hour">
+                <option>בוקר</option>
+                <option>אחה"צ</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td>מלווים</td>
+            <td><select id="escorted"></select></td>
+        </tr>
+        <tr>
+            <td>מספר אנשים-חולה ומלווים</td>
+            <td>
+                <select id="amount">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>כלי עזר</td>
+            <td id="addition"></td>
+        </tr>
+        <tr>
+            <td>רכז- אחראי נסיעה</td>
+            <td><select id="responsible"></select></td>
+        </tr>
+        <tr>
+            <td>סטטוס הסעה</td>
+            <td>
+                <input type="radio" name="status" id="s1" value="ממתינה לשיבוץ" checked> ממתינה לשיבוץ<br>
+                <input type="radio" name="status" id="s2" value="משובצת"> משובצת למסיע<br>
+                <input type="radio" name="status" id="s3" value="מוקפאת"> מוקפאת<br>
+                <input type="radio" name="status" id="s4" value="מבוטלת"> מבוטלת<br>
+                <input type="radio" name="status" id="s5" value="בדרך"> בדרך<br>
+                <input type="radio" name="status" id="s6" value="בוצעה בהצלחה">בוצעה בהצלחה<br>
+            </td>
+        </tr>
+        <tr>
+            <td>הערות</td>
+            <td><input id="remarks" type="text" /></td>
+        </tr>
+    </table>
+    <input type="button" onclick="insertRidePat()" value="ADD" />
+    <div id="resultsDiv"></div>
+</body>
+</html>

@@ -1,0 +1,669 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="ajaxCalls.js"></script>
+    <script>
+
+        function activate() {
+            var p = document.getElementById("prefixText").value;
+            request = {
+                prefix: p
+            }
+
+            getPatientAjax(request, getUserSuccess, getUserFailure);
+        }
+
+        function getUserSuccess(result) {
+            people = $.parseJSON(result.d);
+
+            str = "";
+            for (i = 0; i < people.length; i++) {
+                str += "the name is " + people[i].FirstNameH + "  " + people[i].LastNameH + "<BR/>";
+            }
+            document.getElementById("resultsDiv").innerHTML = str;
+        }
+
+        function getUserFailure(error) {
+
+        }
+
+        function activatehospital() {
+            var e = document.getElementById("hospitals");
+            var strUser = e.options[e.selectedIndex].value;
+            request = {
+                prefix: strUser
+            }
+            getPatienHospitaltAjax(request, getHospitalsSuccess, getHospitalsFailure);
+        }
+
+        function getHospitalsSuccess(result) {
+            people = $.parseJSON(result.d);
+
+            str = "";
+            for (i = 0; i < people.length; i++) {
+                str += "the name is " + people[i].FirstNameH + "  " + people[i].LastNameH + "<BR/>";
+            }
+            document.getElementById("resultsDiv1").innerHTML = str;
+        }
+
+        function getHospitalsFailure(error) {
+
+        }
+
+        function getNum(val) {
+            if (isNaN(val)) {
+                return 0;
+            }
+            return val;
+        }
+        function insertpat() {
+            var name = document.getElementById("name").value;
+            var lastName = document.getElementById("lastName").value;
+            var nameA = document.getElementById("nameA").value;
+            var lastNameA = document.getElementById("lastNameA").value;
+            var phone = getNum(parseInt(document.getElementById("phone").value));
+            var phone1 = getNum(parseInt(document.getElementById("phone2").value));
+            var phoneHome = getNum(parseInt(document.getElementById("phoneHome").value));
+            var city = document.getElementById("city").value;
+            var birthDate = document.getElementById("birthDate").value;
+            var hospital = document.getElementById("hospital").value;
+            var barrier = document.getElementById("barrier").value;
+            var department = document.getElementById("department").value;
+            var history = document.getElementById("history").value;
+            var remarks = document.getElementById("remarks").value;
+            var status;
+            var gender;
+            //var addition;
+            if (document.getElementById('s1').checked) {
+                status = document.getElementById('s1').value;
+            }
+            else
+                status = document.getElementById('s2').value;
+
+            if (document.getElementById('r1').checked) {
+                gender = document.getElementById('r1').value;
+            }
+            else
+                gender = document.getElementById('r2').value;
+            var a= document.getElementById("area");
+            var area = a.options[a.selectedIndex].value;
+
+            var add = document.getElementById("addition");
+            var addition = add.options[add.selectedIndex].value;
+            //if (document.getElementById('add1').checked) {
+            //    addition = document.getElementById('add1').value;
+            //}
+            //else if (document.getElementById('add2').checked)
+            //    addition = document.getElementById('add2').value;
+            //else if (document.getElementById('add3').checked)
+            //    addition = document.getElementById('add3').value;
+            //else
+            //    addition = document.getElementById('add').value;
+            barrier = { Name: barrier }
+            hospital = { Name: hospital }
+            patient = {
+                firstNameH: name, firstNameA: nameA, lastNameH: lastName, lastNameA: lastNameA, cellPhone: phone, cellPhone1: phone1,
+                homePhone: phoneHome, city: city, gender: gender, birthDate: birthDate, barrier: barrier, hospital: hospital,
+                department: department, livingArea: area, status: status, addition: addition, history: history, remarks: remarks
+            } 
+
+            request = { patient: patient }
+            insertPatAjax(request, getvolSuccess, getvolFailure);
+            var E1 = document.getElementById("E1name").value;
+            var E1nameA = document.getElementById("E1nameA").value;
+            var E2 = document.getElementById("E2name").value;
+            var E2nameA = document.getElementById("E2nameA").value;
+            var E3 = document.getElementById("E3name").value;
+            var E3nameA = document.getElementById("E3nameA").value;
+            if (E1 != "" || E1nameA != "")
+                insertE1(patient);
+            if (E2 != "" || E2nameA != "")
+                insertE2(patient);
+            if (E3 != "" || E3nameA != "")
+                insertE3(patient);
+        }
+
+        function insertE1(patient) {
+            var E1name = document.getElementById("E1name").value;
+            var E1lastName = document.getElementById("E1lastName").value;
+            var E1nameA = document.getElementById("E1nameA").value;
+            var E1lastNameA = document.getElementById("E1lastNameA").value;
+            var E1phone = getNum(parseInt(document.getElementById("E1phone").value));
+            var E1phone2 = getNum(parseInt(document.getElementById("E1phone2").value));
+            var E1phoneHome = getNum(parseInt(document.getElementById("E1phoneHome").value));
+            var E1city = document.getElementById("E1city").value;
+            var E1status;
+            var E1gender;
+            var E1contactType;
+            if (document.getElementById('s11').checked) {
+                E1status = document.getElementById('s11').value;
+            }
+            else
+                E1status = document.getElementById('s12').value;
+            if (document.getElementById('r11').checked) {
+                E1gender = document.getElementById('r11').value;
+            }
+            else
+                E1gender = document.getElementById('r12').value;
+
+            if (document.getElementById('t11').checked) {
+                E1contactType = document.getElementById('t11').value;
+            }
+            else if (document.getElementById('t12').checked) {
+                E1contactType = document.getElementById('t12').value;
+            }
+            else if (document.getElementById('t13').checked) {
+                E1contactType = document.getElementById('t13').value;
+            }
+            else if (document.getElementById('t14').checked) {
+                E1contactType = document.getElementById('t14').value;
+            }
+            else if (document.getElementById('t15').checked) {
+                E1contactType = document.getElementById('t15').value;
+            }
+            else if (document.getElementById('t16').checked) {
+                E1contactType = document.getElementById('t16').value;
+            }
+            else if (document.getElementById('t17').checked) {
+                E1contactType = document.getElementById('t17').value;
+            }
+            else
+                E1contactType = document.getElementById('t18').value;
+
+
+            escorted = {
+                pat: patient, firstNameH: E1name, firstNameA: E1nameA, lastNameH: E1lastName, lastNameA: E1lastNameA, addrees: E1city, cellPhone: E1phone,
+                cellPhone2: E1phone2, homePhone: E1phoneHome, status: E1status, contactType:E1contactType, gender: E1gender
+            }
+            request = { escorted: escorted }
+            insertEscAjax(request, getESuccess, getEFailure);
+        }
+
+        function insertE2(patient) {
+            var E2name = document.getElementById("E2name").value;
+            var E2lastName = document.getElementById("E2lastName").value;
+            var E2nameA = document.getElementById("E2nameA").value;
+            var E2lastNameA = document.getElementById("E2lastNameA").value;
+            var E2phone = getNum(parseInt(document.getElementById("E2phone").value));
+            var E21phone2 = getNum(parseInt(document.getElementById("E2phone2").value));
+            var E2phoneHome = getNum(parseInt(document.getElementById("E2phoneHome").value));
+            var E2city = document.getElementById("E2city").value;
+            var E2status;
+            var E2gender;
+            var E2contactType;
+            if (document.getElementById('s21').checked) {
+                E2status = document.getElementById('s21').value;
+            }
+            else
+                E2status = document.getElementById('s22').value;
+            if (document.getElementById('r21').checked) {
+                E2gender = document.getElementById('r21').value;
+            }
+            else
+                E2gender = document.getElementById('r22').value;
+
+            if (document.getElementById('t21').checked) {
+                E2contactType = document.getElementById('t21').value;
+            }
+            else if (document.getElementById('t22').checked) {
+                E2contactType = document.getElementById('t22').value;
+            }
+            else if (document.getElementById('t23').checked) {
+                E2contactType = document.getElementById('t23').value;
+            }
+            else if (document.getElementById('t24').checked) {
+                E2contactType = document.getElementById('t24').value;
+            }
+            else if (document.getElementById('t25').checked) {
+                E2contactType = document.getElementById('t25').value;
+            }
+            else if (document.getElementById('t26').checked) {
+                E2contactType = document.getElementById('t26').value;
+            }
+            else if (document.getElementById('t27').checked) {
+                E2contactType = document.getElementById('t27').value;
+            }
+            else
+                E2contactType = document.getElementById('t28').value;
+
+
+            escorted = {
+                pat: patient, firstNameH: E2name, firstNameA: E2nameA, lastNameH: E2lastName, lastNameA: E2lastNameA, addrees: E2city, cellPhone: E2phone,
+                cellPhone2: E2phone2, homePhone: E2phoneHome, status: E2status, contactType: E2contactType, gender: E2gender
+            }
+            request = { escorted: escorted }
+            insertEscAjax(request, getESuccess, getEFailure);
+        }
+
+
+        function insertE3(patient) {
+            var E3name = document.getElementById("E3name").value;
+            var E3lastName = document.getElementById("E3lastName").value;
+            var E3nameA = document.getElementById("E3nameA").value;
+            var E3lastNameA = document.getElementById("E3lastNameA").value;
+            var E3phone = getNum(parseInt(document.getElementById("E3phone").value));
+            var E3phone2 = getNum(parseInt(document.getElementById("E3phone2").value));
+            var E3phoneHome = getNum(parseInt(document.getElementById("E3phoneHome").value));
+            var E3city = document.getElementById("E3city").value;
+            var E3status;
+            var E3gender;
+            var E3contactType;
+            if (document.getElementById('s31').checked) {
+                E3status = document.getElementById('s31').value;
+            }
+            else
+                E3status = document.getElementById('s32').value;
+            if (document.getElementById('r31').checked) {
+                E3gender = document.getElementById('r31').value;
+            }
+            else
+                E3gender = document.getElementById('r32').value;
+
+            if (document.getElementById('t31').checked) {
+                E3contactType = document.getElementById('t31').value;
+            }
+            else if (document.getElementById('t32').checked) {
+                E3contactType = document.getElementById('t32').value;
+            }
+            else if (document.getElementById('t33').checked) {
+                E3contactType = document.getElementById('t33').value;
+            }
+            else if (document.getElementById('t34').checked) {
+                E3contactType = document.getElementById('t34').value;
+            }
+            else if (document.getElementById('t35').checked) {
+                E3contactType = document.getElementById('t35').value;
+            }
+            else if (document.getElementById('t36').checked) {
+                E3contactType = document.getElementById('t36').value;
+            }
+            else if (document.getElementById('t37').checked) {
+                E3contactType = document.getElementById('t37').value;
+            }
+            else
+                E3contactType = document.getElementById('t38').value;
+
+
+            escorted = {
+                pat: patient, firstNameH: E3name, firstNameA: E3nameA, lastNameH: E3lastName, lastNameA: E3lastNameA, addrees: E3city, cellPhone: E3phone,
+                cellPhone2: E3phone2, homePhone: E3phoneHome, status: E3status, contactType: E3contactType, gender: E3gender
+            }
+            request = { escorted: escorted }
+            insertEscAjax(request, getESuccess, getEFailure);
+        }
+
+        function getvolSuccess(result) {
+            people = $.parseJSON(result.d);
+            document.getElementById("insertDiv").innerHTML = "החולה הוכנס בהצלחה למערכת";
+        }
+
+        function getvolFailure(error) {
+            alert(error);
+        }
+
+        function getESuccess(result) {
+            people = $.parseJSON(result.d);
+            document.getElementById("insertDiv").innerHTML += " המלווה הוכנס בהצלחה למערכת ";
+        }
+
+        function getEFailure(error) {
+            alert(error);
+        }
+
+    </script>
+</head>
+<body dir="rtl">
+    <h1>הצג חולים במערכת</h1>
+    <input type="text" id="prefixText" />
+    <input type="button" onclick="activate()" value="pressMe" />
+    <div id="resultsDiv"></div>
+
+    <h1>הצג חולים לפי בית חולים</h1>
+    <select id="hospitals" size="4">
+        <option>תל השומר</option>
+        <option>שניידר</option>
+        <option>שיבא</option>
+        <option>איכילוב</option>
+    </select>
+    <input type="button" onclick="activatehospital()" value="Choose" >
+    <div id="resultsDiv1"></div>
+
+    <div id="addpat">
+        <h1>הוספת חולה</h1>
+        <table>
+            <tr>
+                <td>
+                    שם:
+                </td>
+                <td>
+                    <input type="text" id="name" placeholder="עברית"/>
+                </td>
+                <td>
+                    <input type="text" id="nameA" placeholder="ערבית"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    שם משפחה: 
+                </td>
+                <td>
+                    <input type="text" id="lastName" placeholder="עברית" />
+                </td>
+                <td>
+                    <input type="text" id="lastNameA" placeholder="ערבית"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    מין:
+                </td>
+                <td><input type="radio" name="gender" id="r1" value="זכר" checked> זכר<br>
+                     <input type="radio" name="gender" id="r2" value="נקבה"> נקבה<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>טלפון:</td>
+                <td><input type="text" id="phone" /></td>
+                <td><input type="text" id="phone2" /></td>
+            </tr>
+            <tr>
+                <td> טלפון בית:</td>
+                <td><input type="text" id="phoneHome" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>עיר:</td>
+                <td><input type="text" id="city" /></td>
+            </tr>
+            <tr>
+                <td>אזור מגורים:</td>
+                <td><select id="area">
+                        <option value='' disabled selected>בחר אזור מגורים:</option>
+                        <option value="צפון">צפון</option>
+                        <option value="מרכז">מרכז</option>
+                        <option value="דרום">דרום</option>
+                    </select>
+                <td></td>
+            </tr>
+            <tr>
+                <td>כלי עזר:</td>
+                <td>
+                    <select id="addition" selected>
+                        <option value="ללא">ללא</option>
+                        <option value="כיסא גלגלים">כיסא גלגלים</option>
+                        <option value="בוסטר">בוסטר</option>
+                        <option value="כיסא תינוק">כיסא תינוק</option>
+                    </select>
+                    <!--<input type="radio" name="addition" id="add" value="ללא" checked> ללא<br>
+                    <input type="radio" name="addition" id="add1" value="כיסא גלגלים"> כיסא גלגלים<br>
+                    <input type="radio" name="addition" id="add2" value="בוסטר"> בוסטר<br>
+                    <input type="radio" name="addition" id="add3" value="כיסא תינוק"> כיסא תינוק<br>-->
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> תאריך יום הולדת:</td>
+                <td><input type="text" id="birthDate" placeholder="yyyy-mm-dd" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> בית חולים:</td>
+                <td><input type="text" id="hospital" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>מחלקה:</td>
+                <td><input type="text" id="department" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>מחסום:</td>
+                <td><input type="text" id="barrier" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> סטטוס:</td>
+                <td><input type="radio" name="status" id="s1" value="פעיל" checked> פעיל<br>
+<input type="radio" name="status" id="s2" value="לא פעיל"> לא פעיל<br></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>היסטוריה רפואית:</td>
+                <td><input type="text" id="history" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>הערות:</td>
+                <td><input type="text" id="remarks" /></td>
+                <td></td>
+            </tr>
+
+        </table>
+        <div style="float:right"></div>
+        <h1>הוספת מלווה 1</h1>
+        <table>
+            <tr>
+                <td>
+                    שם:
+                </td>
+                <td>
+                    <input type="text" id="E1name" placeholder="עברית" />
+                </td>
+                <td>
+                    <input type="text" id="E1nameA" placeholder="ערבית" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    שם משפחה:
+                </td>
+                <td>
+                    <input type="text" id="E1lastName" placeholder="עברית" />
+                </td>
+                <td>
+                    <input type="text" id="E1lastNameA" placeholder="ערבית" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    מין:
+                </td>
+                <td>
+                    <input type="radio" name="E1gender" id="r11" value="זכר" checked> זכר<br>
+                    <input type="radio" name="E1gender" id="r12" value="נקבה"> נקבה<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>טלפון:</td>
+                <td><input type="text" id="E1phone" /></td>
+                <td><input type="text" id="E1phone2" /></td>
+            </tr>
+            <tr>
+                <td> טלפון בית:</td>
+                <td><input type="text" id="E1phoneHome" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>עיר:</td>
+                <td><input type="text" id="E1city" /></td>
+            </tr>
+            <tr>
+                <td> סוג קשר לחולה:</td>
+                <td>
+                    <input type="radio" name="E1contactType" id="t11" value="הורה" checked> הורה<br>
+                    <input type="radio" name="E1contactType" id="t12" value="דוד או דודה"> דוד או דודה<br>
+                    <input type="radio" name="E1contactType" id="t13" value="אח או אחות"> אח או אחות<br>
+                    <input type="radio" name="E1contactType" id="t14" value="חבר או חברה">חבר או חברה<br>
+                    <input type="radio" name="E1contactType" id="t15" value="בעל">בעל<br>
+                    <input type="radio" name="E1contactType" id="t16" value="אישה"> אישה<br>
+                    <input type="radio" name="E1contactType" id="t17" value="סבא או סבתא">סבא או סבתא<br>
+                    <input type="radio" name="E1contactType" id="t18" value="קרוב משפחה">קרוב משפחה<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> סטטוס:</td>
+                <td>
+                    <input type="radio" name="E1status" id="s11" value="פעיל" checked> פעיל<br>
+                    <input type="radio" name="E1status" id="s12" value="לא פעיל"> לא פעיל<br>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <h1>הוספת מלווה 2</h1>
+        <table>
+            <tr>
+                <td>
+                    שם:
+                </td>
+                <td>
+                    <input type="text" id="E2name" placeholder="עברית" />
+                </td>
+                <td>
+                    <input type="text" id="E2nameA" placeholder="ערבית" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    שם משפחה:
+                </td>
+                <td>
+                    <input type="text" id="E2lastName" placeholder="עברית" />
+                </td>
+                <td>
+                    <input type="text" id="E2lastNameA" placeholder="ערבית" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    מין:
+                </td>
+                <td>
+                    <input type="radio" name="E2gender" id="r21" value="זכר" checked> זכר<br>
+                    <input type="radio" name="E2gender" id="r22" value="נקבה"> נקבה<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>טלפון:</td>
+                <td><input type="text" id="E2phone" /></td>
+                <td><input type="text" id="E2phone2" /></td>
+            </tr>
+            <tr>
+                <td> טלפון בית:</td>
+                <td><input type="text" id="E2phoneHome" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>עיר:</td>
+                <td><input type="text" id="E2city" /></td>
+            </tr>
+            <tr>
+                <td> סוג קשר לחולה:</td>
+                <td>
+                    <input type="radio" name="E2contactType" id="t21" value="הורה" checked> הורה<br>
+                    <input type="radio" name="E2contactType" id="t22" value="דוד או דודה"> דוד או דודה<br>
+                    <input type="radio" name="E2contactType" id="t23" value="אח או אחות"> אח או אחות<br>
+                    <input type="radio" name="E2contactType" id="t24" value="חבר או חברה">חבר או חברה<br>
+                    <input type="radio" name="E2contactType" id="t25" value="בעל">בעל<br>
+                    <input type="radio" name="E2contactType" id="t26" value="אישה"> אישה<br>
+                    <input type="radio" name="E2contactType" id="t27" value="סבא או סבתא">סבא או סבתא<br>
+                    <input type="radio" name="E2contactType" id="t28" value="קרוב משפחה">קרוב משפחה<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> סטטוס:</td>
+                <td>
+                    <input type="radio" name="E2status" id="s21" value="פעיל" checked> פעיל<br>
+                    <input type="radio" name="E2status" id="s22" value="לא פעיל"> לא פעיל<br>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <h1>הוספת מלווה 3</h1>
+        <table>
+            <tr>
+                <td>
+                    שם:
+                </td>
+                <td>
+                    <input type="text" id="E3name" placeholder="עברית" />
+                </td>
+                <td>
+                    <input type="text" id="E3nameA" placeholder="ערבית" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    שם משפחה:
+                </td>
+                <td>
+                    <input type="text" id="E3lastName" placeholder="עברית" />
+                </td>
+                <td>
+                    <input type="text" id="E3lastNameA" placeholder="ערבית" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    מין:
+                </td>
+                <td>
+                    <input type="radio" name="E3gender" id="r31" value="זכר" checked> זכר<br>
+                    <input type="radio" name="E3gender" id="r32" value="נקבה"> נקבה<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>טלפון:</td>
+                <td><input type="text" id="E3phone" /></td>
+                <td><input type="text" id="E3phone2" /></td>
+            </tr>
+            <tr>
+                <td> טלפון בית:</td>
+                <td><input type="text" id="E3phoneHome" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>עיר:</td>
+                <td><input type="text" id="E3city" /></td>
+            </tr>
+            <tr>
+                <td> סוג קשר לחולה:</td>
+                <td>
+                    <input type="radio" name="E3contactType" id="t31" value="הורה" checked> הורה<br>
+                    <input type="radio" name="E3contactType" id="t32" value="דוד או דודה"> דוד או דודה<br>
+                    <input type="radio" name="E3contactType" id="t33" value="אח או אחות"> אח או אחות<br>
+                    <input type="radio" name="E3contactType" id="t34" value="חבר או חברה">חבר או חברה<br>
+                    <input type="radio" name="E3contactType" id="t35" value="בעל">בעל<br>
+                    <input type="radio" name="E3contactType" id="t36" value="אישה"> אישה<br>
+                    <input type="radio" name="E3contactType" id="t37" value="סבא או סבתא">סבא או סבתא<br>
+                    <input type="radio" name="E3contactType" id="t38" value="קרוב משפחה">קרוב משפחה<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> סטטוס:</td>
+                <td>
+                    <input type="radio" name="E3status" id="s31" value="פעיל" checked> פעיל<br>
+                    <input type="radio" name="E3status" id="s32" value="לא פעיל"> לא פעיל<br>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        
+        
+        
+        
+        
+        <input type="button" onclick="insertpat()" value="ADD" />
+        <div id="insertDiv"></div>
+    </div>
+</body>
+</html>

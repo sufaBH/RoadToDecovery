@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="ajaxCalls.js"></script>
+    <title></title>
+    <script>
+        function destinationList() {
+            var p = document.getElementById("prefixText").value;
+            request = {
+                prefix: p
+            }
+
+            getDestAjax(request, getdestSuccess, getdestFailure);
+        }
+
+        function getdestSuccess(result) {
+            destinationlist = $.parseJSON(result.d);
+
+            str = "";
+            str += "<option value='' disabled selected>מקום התחלה</option>";
+            str1 = "";
+            str1 += "<option value='' disabled selected>מקום סיום</option>";
+            for (i = 0; i < destinationlist.length; i++) {
+                str += "<option value='" + destinationlist[i].Name+"'>" + destinationlist[i].Name + " </option>"; 
+                str1 += "<option value='" + destinationlist[i].Name +"'>" + destinationlist[i].Name + " </option>"; 
+            }
+            document.getElementById("start1").innerHTML = str;
+            document.getElementById("start2").innerHTML = str;
+            document.getElementById("start3").innerHTML = str;
+            document.getElementById("finish1").innerHTML = str1;
+            document.getElementById("finish2").innerHTML = str1;
+            document.getElementById("finish3").innerHTML = str;
+        }
+
+        function getdestFailure(error) {
+
+        }
+
+
+        function activate() {
+            var p = document.getElementById("prefixText").value;
+            request = {
+                prefix : p}
+
+            getUserAjax(request, getUserSuccess, getUserFailure);
+        }
+
+      
+        function getUserSuccess(result) {
+            people = $.parseJSON(result.d);
+
+            str = "";
+            str += "<select>";
+            for (i = 0; i < people.length; i++) {
+                str += "<option>" + people[i].FirstNameH + "  " + people[i].LastNameH + " </option>";
+                //str += "the name is " + people[i].FirstNameH + "  " + people[i].LastNameH + "<BR/>";
+            }
+            str += "</select>";
+            document.getElementById("resultsDiv").innerHTML = str;
+        }
+
+        function getUserFailure(error) {
+
+        }
+        function getNum(val) {
+            if (isNaN(val)) {
+                return 0;
+            }
+            return val;
+        }
+
+        function activate1() {
+            var name = document.getElementById("name").value;
+            var lastName = document.getElementById("lastName").value;
+            var nameA = document.getElementById("nameA").value;
+            var lastNameA = document.getElementById("lastNameA").value;
+            var phone = document.getElementById("phone").value;
+            var phone2 = getNum(parseInt(document.getElementById("phone2").value));
+            var homePhone = getNum(parseInt(document.getElementById("homePhone").value));
+            var city = document.getElementById("city").value;
+            var address = document.getElementById("street").value + " " + document.getElementById("num").value;
+            var email = document.getElementById("email").value;
+            var birthDate = document.getElementById("birthDate").value;
+            var joinDate = document.getElementById("joinDate").value;
+
+            var s1 = document.getElementById("start1");
+            var start1 = s1.options[s1.selectedIndex].value;
+            var s2 = document.getElementById("start2");
+            var start2 = s2.options[s2.selectedIndex].value;
+            var s3 = document.getElementById("start3");
+            var start3 = s3.options[s3.selectedIndex].value;
+            var f1 = document.getElementById("finish1");
+            var finish1 = f1.options[f1.selectedIndex].value;
+            var f2 = document.getElementById("finish2");
+            var finish2 = f2.options[f2.selectedIndex].value;
+            var f3 = document.getElementById("finish3");
+            var finish3 = f3.options[f3.selectedIndex].value;
+
+            var preferRoute1 = start1 + " " + finish1;
+            var preferRoute2 = start2 + " " + finish2;
+            var preferRoute3= start3 + " " + finish3;
+            var day1 = document.getElementById("day1").value;
+            var day2 = document.getElementById("day2").value;
+            var day3 = document.getElementById("day3").value;
+            var hour1 = document.getElementById("hour1").value;
+            var hour2 = document.getElementById("hour2").value;
+            var hour3 = document.getElementById("hour3").value;
+            var status;
+            var gender;
+            var KnowArabic;
+            var type;
+            if (document.getElementById('t1').checked) {
+                type = document.getElementById('t1').value;
+            }
+            else
+                type = document.getElementById('t2').value;
+            if (document.getElementById('k1').checked) {
+                KnowArabic = document.getElementById('k1').value;
+            }
+            else
+                KnowArabic = document.getElementById('k2').value;
+            if (document.getElementById('s1').checked) {
+                status = document.getElementById('s1').value;
+            }
+            else
+                status = document.getElementById('s2').value;
+            if (document.getElementById('r1').checked) {
+                gender = document.getElementById('r1').value;
+            }
+            else
+                gender = document.getElementById('r2').value;
+
+            volunteer = {
+                firstNameH: name, firstNameA: nameA, lastNameH: lastName, lastNameA: lastNameA, cellPhone: phone, cellPhone2: phone2, homePhone: homePhone,
+                city: city, address: address, email: email, birthdate: birthDate, joinDate: joinDate, status: status, gender: gender, knowArabic: KnowArabic,
+                preferRoute1: preferRoute1, preferRoute2: preferRoute2, preferRoute3: preferRoute3, day1: day1, day2: day2, day3: day3, hour1: hour1, hour2: hour2, hour3: hour3, typeVol:type
+            }
+            request = { volunteer: volunteer }
+            getvolAjax(request, getvolSuccess, getvolFailure);
+        }
+
+        function getvolSuccess(result) {
+            people = $.parseJSON(result.d);
+            document.getElementById("resultsDiv").innerHTML = "המתנדב הוכנס בהצלחה למערכת";
+        }
+
+        function getvolFailure(error) {
+
+        }
+
+
+
+    </script>
+</head>
+<body dir="rtl" onload="destinationList()">
+    <input type="text" id="prefixText" />
+    <input type="button" onclick="activate()" value="pressMe" />
+    <div id="resultsDiv">
+    </div>
+    <div id="addVol">
+        <h1>הוספת מתנדב</h1>
+        <table>
+            <tr>
+                <td>שם:</td>
+                <td><input type="text" id="name" placeholder="עברית"/></td>
+                <td><input type="text" id="nameA" placeholder="ערבית"/></td>
+            </tr>
+            <tr>
+                <td> שם משפחה: </td>
+                <td><input type="text" id="lastName" placeholder="עברית"/></td>
+                <td><input type="text" id="lastNameA" placeholder="ערבית"/></td>
+            </tr>
+            <tr>
+                <td>טלפון: </td>
+                <td><input type="text" id="phone" /></td>
+                <td><input type="text" id="phone2" /></td>
+            </tr>
+            <tr>
+                <td>טלפון בית: </td>
+                <td><input type="text" id="homePhone" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>עיר: </td>
+                <td><input type="text" id="city" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>רחוב:</td>
+                <td><input type="text" id="street" placeholder="רחוב"/></td>
+                <td><input type="text" id="num" placeholder="מספר דירה"/></td>
+            </tr>
+            <tr>
+                <td>אי מייל: </td>
+                <td><input type="text" id="email" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>תאריך יום הולדת: </td>
+                <td><input type="text" id="birthDate" placeholder="yyyy-mm-dd"/></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>מין: </td>
+                <td>
+                    <input type="radio" name="gender" id="r1" value="זכר" checked> זכר<br>
+                    <input type="radio" name="gender" id="r2" value="נקבה"> נקבה<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> תאריך הצטרפות: </td>
+                <td><input type="text" id="joinDate" placeholder="yyyy-mm-dd"/></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>סטטוס:</td> 
+                <td>
+                    <input type="radio" name="status" id="s1" value="פעיל" checked> פעיל<br>
+                    <input type="radio" name="status" id="s2" value="לא פעיל"> לא פעיל<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> יודע ערבית?: </td>
+                <td><input type="radio" name="know" id="k1" value="כן" > כן<br>
+                    <input type="radio" name="know" id="k2" value="לא" checked> לא<br></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>העדפת מסלול 1:</td>
+                <td>
+                    <select id="start1">
+                    </select>
+                </td>
+                <td><select id="finish1"></select></td>
+            </tr>
+            <tr>
+                <td>העדפת מסלול 2:</td>
+                <td> <select id="start2"></select></td>
+                <td><select id="finish2"></select></td>
+            </tr>
+            <tr>
+                <td>העדפת מסלול 3:</td>
+                <td> <select id="start3"></select></td>
+                <td><select id="finish3"></select></td>
+            </tr>
+            <tr>
+                <td>העדפה יום+שעה 1:</td>
+                <td> <input type="text" id="day1" placeholder="יום"/></td>
+                <td><input type="text" id="hour1" placeholder="שעה"/></td>
+            </tr>
+            <tr>
+                <td>העדפה יום+שעה 2:</td>
+                <td> <input type="text" id="day2"  placeholder="יום"/></td>
+                <td><input type="text" id="hour2" placeholder="שעה" /></td>
+            </tr>
+            <tr>
+                <td>העדפה יום+שעה 3:</td>
+                <td> <input type="text" id="day3" placeholder="יום"/></td>
+                <td><input type="text" id="hour3" placeholder="שעה" /></td>
+            </tr>
+            <tr>
+                <td>סוג מתנדב </td>
+                <td><input type="radio" name="type" id="t1" value="רגיל" checked> רגיל<br>
+                    <input type="radio" name="type" id="t2" value="רכז" > רכז<br></td>
+                <td></td>
+            </tr>
+        </table>
+        <input type="button" onclick="activate1()" value="ADD" />
+    </div>
+    
+</body>
+</html>

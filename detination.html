@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="ajaxCalls.js"></script>
+    <script>
+
+        function respList() {
+            var p = "רגיל";
+            request = {
+                prefix: p
+            }
+
+            getrespListAjax(request, getresptSuccess, getrespFailure);
+        }
+
+        function getresptSuccess(result) {
+            resplist = $.parseJSON(result.d);
+
+            str = "";
+            str += "<option value='' disabled selected>בחר רכז</option>";
+            for (i = 0; i < resplist.length; i++) {
+                str += "<option value='" + resplist[i].DisplayName + "'>" + resplist[i].FirstNameH + " " + resplist[i].LastNameH +" </option>";
+            }
+            document.getElementById("responsible").innerHTML = str;
+        }
+
+        function getrespFailure(error) {
+
+        }
+
+
+
+        function getNum(val) {
+            if (isNaN(val)) {
+                return 0;
+            }
+            return val;
+        }
+
+        function insertDest() {
+            var type;
+            if (document.getElementById('t1').checked) {
+                type = document.getElementById('t1').value;
+            }
+            else if (document.getElementById('t2').checked)
+                type = document.getElementById('t2').value;
+            else
+                type = document.getElementById('t3').value;
+            var name = document.getElementById("name").value;
+            var area;
+            if (document.getElementById('a1').checked) {
+                area = document.getElementById('a1').value;
+            }
+            else if (document.getElementById('a2').checked)
+                area = document.getElementById('a2').value;
+            else
+                area = document.getElementById('a3').value;
+            var direction = document.getElementById("direction").value;
+            var resp = document.getElementById("responsible")
+            var responsible = resp.options[resp.selectedIndex].value;
+            var status;
+            if (document.getElementById('s1').checked) {
+                status = document.getElementById('s1').value;
+            }
+            else
+                status = document.getElementById('s2').value;
+            var remarks = document.getElementById("remarks").value;
+            var nameM = document.getElementById("nameM").value;
+            var lastNameM = document.getElementById("lastNameM").value;
+            var phoneM = getNum(parseInt(document.getElementById("phoneM").value));
+            var phoneM2 = getNum(parseInt(document.getElementById("phoneM2").value));
+            responsible = { displayName: responsible }
+            destination = {
+                type: type, name: name, area: area, direction: direction, responsible: responsible,
+                status: status, remarks: remarks, managerName: nameM, managerLastName: lastNameM,
+                managerPhones: phoneM, managerPhones2: phoneM2
+            }
+            request = { destination: destination }
+            getdestinationAjax(request, getdestSuccess, getdestFailure);
+        }
+
+        function getdestSuccess(result) {
+            people = $.parseJSON(result.d);
+            document.getElementById("resultsDiv").innerHTML = "היעד הוכנס בהצלחה למערכת";
+        }
+
+        function getdestFailure(error) {
+
+        }
+    </script>
+</head>
+<body dir="rtl" onload="respList()">
+    <div id="addDestination">
+        <h1>הוספת יעד</h1>
+        <table>
+            <tr>
+                <td>סוג יעד: </td>
+                <td>
+                    <input type="radio" name="type" id="t1" value="מחסום" checked> מחסום<br>
+                    <input type="radio" name="type" id="t2" value="בית חולים"> בית חולים<br>
+                    <input type="radio" name="type" id="t3" value="אחר"> אחר<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>שם:</td>
+                <td><input type="text" id="name" placeholder="עברית" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>אזור:</td>
+                <td>
+                    <input type="radio" name="area" id="a1" value="צפון" checked> צפון<br>
+                    <input type="radio" name="area" id="a2" value="מרכז"> מרכז<br>
+                    <input type="radio" name="area" id="a3" value="דרום"> דרום<br>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> הוראות הגעה: </td>
+                <td><textarea id="direction" rows="2" cols="20"></textarea></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>רכז אחראי </td>
+                <td><select id="responsible"></select>
+                <!--<input type="text" id="responsible" />-->
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>מצב יעד</td>
+                <td><input type="radio" name="status" id="s1" value="פעיל" checked> פעיל<br>
+                    <input type="radio" name="status" id="s2" value="לא פעיל"> לא פעיל<br></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>הערות: </td>
+                <td><input type="text" id="remarks" /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>שם אחראי יעד:</td>
+                <td><input type="text" id="nameM" placeholder="שם פרטי" /></td>
+                <td><input type="text" id="lastNameM" placeholder="שם משפחה" /></td>
+            </tr>
+            <tr>
+                <td>טלפון אחראי יעד: </td>
+                <td><input type="text" id="phoneM" /></td>
+                <td><input type="text" id="phoneM2" /></td>
+            </tr>
+           
+        </table>
+        <input type="button" onclick="insertDest()" value="ADD" />
+    </div>
+
+</body>
+</html>
