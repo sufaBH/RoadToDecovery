@@ -76,7 +76,6 @@
             var remarks = document.getElementById("remarks").value;
             var status;
             var gender;
-            //var addition;
             if (document.getElementById('s1').checked) {
                 status = document.getElementById('s1').value;
             }
@@ -93,15 +92,6 @@
 
             var add = document.getElementById("addition");
             var addition = add.options[add.selectedIndex].value;
-            //if (document.getElementById('add1').checked) {
-            //    addition = document.getElementById('add1').value;
-            //}
-            //else if (document.getElementById('add2').checked)
-            //    addition = document.getElementById('add2').value;
-            //else if (document.getElementById('add3').checked)
-            //    addition = document.getElementById('add3').value;
-            //else
-            //    addition = document.getElementById('add').value;
             barrier = { Name: barrier }
             hospital = { Name: hospital }
             patient = {
@@ -313,357 +303,386 @@
             alert(error);
         }
 
+        function getPatient() {
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            request = {
+                phoneNumber: phoneNumber
+            }
+
+            getPatientByPhoneNumberAjax(request, getPatientByphoneSuccess, getPatientByphoneFailure);
+        }
+
+
+        function getPatientByphoneSuccess(result) {
+            pat = $.parseJSON(result.d);
+            var name = pat.FirstNameH;
+            var lastName = pat.LastNameH;
+            str = " " + name + " " + lastName;
+            document.getElementById("resultsDiv").innerHTML = str;
+        }
+
+        function getPatientByphoneFailure(error) {
+
+        }
+
     </script>
 </head>
 <body dir="rtl">
-    <h1>הצג חולים במערכת</h1>
-    <input type="text" id="prefixText" />
-    <input type="button" onclick="activate()" value="pressMe" />
-    <div id="resultsDiv"></div>
+    <input type="text" id="phoneNumber" />
+    <input type="button" onclick="getPatient()" value="הבא פרטי חולה" />
 
-    <h1>הצג חולים לפי בית חולים</h1>
-    <select id="hospitals" size="4">
-        <option>תל השומר</option>
-        <option>שניידר</option>
-        <option>שיבא</option>
-        <option>איכילוב</option>
-    </select>
-    <input type="button" onclick="activatehospital()" value="Choose" >
-    <div id="resultsDiv1"></div>
+        <h1>הצג חולים במערכת</h1>
+        <input type="text" id="prefixText" />
+        <input type="button" onclick="activate()" value="pressMe" />
+        <div id="resultsDiv"></div>
 
-    <div id="addpat">
-        <h1>הוספת חולה</h1>
-        <table>
-            <tr>
-                <td>
-                    שם:
-                </td>
-                <td>
-                    <input type="text" id="name" placeholder="עברית"/>
-                </td>
-                <td>
-                    <input type="text" id="nameA" placeholder="ערבית"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    שם משפחה: 
-                </td>
-                <td>
-                    <input type="text" id="lastName" placeholder="עברית" />
-                </td>
-                <td>
-                    <input type="text" id="lastNameA" placeholder="ערבית"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    מין:
-                </td>
-                <td><input type="radio" name="gender" id="r1" value="זכר" checked> זכר<br>
-                     <input type="radio" name="gender" id="r2" value="נקבה"> נקבה<br>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>טלפון:</td>
-                <td><input type="text" id="phone" /></td>
-                <td><input type="text" id="phone2" /></td>
-            </tr>
-            <tr>
-                <td> טלפון בית:</td>
-                <td><input type="text" id="phoneHome" /></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>עיר:</td>
-                <td><input type="text" id="city" /></td>
-            </tr>
-            <tr>
-                <td>אזור מגורים:</td>
-                <td><select id="area">
-                        <option value='' disabled selected>בחר אזור מגורים:</option>
-                        <option value="צפון">צפון</option>
-                        <option value="מרכז">מרכז</option>
-                        <option value="דרום">דרום</option>
-                    </select>
-                <td></td>
-            </tr>
-            <tr>
-                <td>כלי עזר:</td>
-                <td>
-                    <select id="addition" selected>
-                        <option value="ללא">ללא</option>
-                        <option value="כיסא גלגלים">כיסא גלגלים</option>
-                        <option value="בוסטר">בוסטר</option>
-                        <option value="כיסא תינוק">כיסא תינוק</option>
-                    </select>
-                    <!--<input type="radio" name="addition" id="add" value="ללא" checked> ללא<br>
-                    <input type="radio" name="addition" id="add1" value="כיסא גלגלים"> כיסא גלגלים<br>
-                    <input type="radio" name="addition" id="add2" value="בוסטר"> בוסטר<br>
-                    <input type="radio" name="addition" id="add3" value="כיסא תינוק"> כיסא תינוק<br>-->
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td> תאריך יום הולדת:</td>
-                <td><input type="text" id="birthDate" placeholder="yyyy-mm-dd" /></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td> בית חולים:</td>
-                <td><input type="text" id="hospital" /></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>מחלקה:</td>
-                <td><input type="text" id="department" /></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>מחסום:</td>
-                <td><input type="text" id="barrier" /></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td> סטטוס:</td>
-                <td><input type="radio" name="status" id="s1" value="פעיל" checked> פעיל<br>
-<input type="radio" name="status" id="s2" value="לא פעיל"> לא פעיל<br></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>היסטוריה רפואית:</td>
-                <td><input type="text" id="history" /></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>הערות:</td>
-                <td><input type="text" id="remarks" /></td>
-                <td></td>
-            </tr>
+        <h1>הצג חולים לפי בית חולים</h1>
+        <select id="hospitals" size="4">
+            <option>תל השומר</option>
+            <option>שניידר</option>
+            <option>שיבא</option>
+            <option>איכילוב</option>
+        </select>
+        <input type="button" onclick="activatehospital()" value="Choose">
+        <div id="resultsDiv1"></div>
 
-        </table>
-        <div style="float:right"></div>
-        <h1>הוספת מלווה 1</h1>
-        <table>
-            <tr>
-                <td>
-                    שם:
-                </td>
-                <td>
-                    <input type="text" id="E1name" placeholder="עברית" />
-                </td>
-                <td>
-                    <input type="text" id="E1nameA" placeholder="ערבית" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    שם משפחה:
-                </td>
-                <td>
-                    <input type="text" id="E1lastName" placeholder="עברית" />
-                </td>
-                <td>
-                    <input type="text" id="E1lastNameA" placeholder="ערבית" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    מין:
-                </td>
-                <td>
-                    <input type="radio" name="E1gender" id="r11" value="זכר" checked> זכר<br>
-                    <input type="radio" name="E1gender" id="r12" value="נקבה"> נקבה<br>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>טלפון:</td>
-                <td><input type="text" id="E1phone" /></td>
-                <td><input type="text" id="E1phone2" /></td>
-            </tr>
-            <tr>
-                <td> טלפון בית:</td>
-                <td><input type="text" id="E1phoneHome" /></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>עיר:</td>
-                <td><input type="text" id="E1city" /></td>
-            </tr>
-            <tr>
-                <td> סוג קשר לחולה:</td>
-                <td>
-                    <input type="radio" name="E1contactType" id="t11" value="הורה" checked> הורה<br>
-                    <input type="radio" name="E1contactType" id="t12" value="דוד או דודה"> דוד או דודה<br>
-                    <input type="radio" name="E1contactType" id="t13" value="אח או אחות"> אח או אחות<br>
-                    <input type="radio" name="E1contactType" id="t14" value="חבר או חברה">חבר או חברה<br>
-                    <input type="radio" name="E1contactType" id="t15" value="בעל">בעל<br>
-                    <input type="radio" name="E1contactType" id="t16" value="אישה"> אישה<br>
-                    <input type="radio" name="E1contactType" id="t17" value="סבא או סבתא">סבא או סבתא<br>
-                    <input type="radio" name="E1contactType" id="t18" value="קרוב משפחה">קרוב משפחה<br>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td> סטטוס:</td>
-                <td>
-                    <input type="radio" name="E1status" id="s11" value="פעיל" checked> פעיל<br>
-                    <input type="radio" name="E1status" id="s12" value="לא פעיל"> לא פעיל<br>
-                </td>
-                <td></td>
-            </tr>
-        </table>
-        <h1>הוספת מלווה 2</h1>
-        <table>
-            <tr>
-                <td>
-                    שם:
-                </td>
-                <td>
-                    <input type="text" id="E2name" placeholder="עברית" />
-                </td>
-                <td>
-                    <input type="text" id="E2nameA" placeholder="ערבית" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    שם משפחה:
-                </td>
-                <td>
-                    <input type="text" id="E2lastName" placeholder="עברית" />
-                </td>
-                <td>
-                    <input type="text" id="E2lastNameA" placeholder="ערבית" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    מין:
-                </td>
-                <td>
-                    <input type="radio" name="E2gender" id="r21" value="זכר" checked> זכר<br>
-                    <input type="radio" name="E2gender" id="r22" value="נקבה"> נקבה<br>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>טלפון:</td>
-                <td><input type="text" id="E2phone" /></td>
-                <td><input type="text" id="E2phone2" /></td>
-            </tr>
-            <tr>
-                <td> טלפון בית:</td>
-                <td><input type="text" id="E2phoneHome" /></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>עיר:</td>
-                <td><input type="text" id="E2city" /></td>
-            </tr>
-            <tr>
-                <td> סוג קשר לחולה:</td>
-                <td>
-                    <input type="radio" name="E2contactType" id="t21" value="הורה" checked> הורה<br>
-                    <input type="radio" name="E2contactType" id="t22" value="דוד או דודה"> דוד או דודה<br>
-                    <input type="radio" name="E2contactType" id="t23" value="אח או אחות"> אח או אחות<br>
-                    <input type="radio" name="E2contactType" id="t24" value="חבר או חברה">חבר או חברה<br>
-                    <input type="radio" name="E2contactType" id="t25" value="בעל">בעל<br>
-                    <input type="radio" name="E2contactType" id="t26" value="אישה"> אישה<br>
-                    <input type="radio" name="E2contactType" id="t27" value="סבא או סבתא">סבא או סבתא<br>
-                    <input type="radio" name="E2contactType" id="t28" value="קרוב משפחה">קרוב משפחה<br>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td> סטטוס:</td>
-                <td>
-                    <input type="radio" name="E2status" id="s21" value="פעיל" checked> פעיל<br>
-                    <input type="radio" name="E2status" id="s22" value="לא פעיל"> לא פעיל<br>
-                </td>
-                <td></td>
-            </tr>
-        </table>
-        <h1>הוספת מלווה 3</h1>
-        <table>
-            <tr>
-                <td>
-                    שם:
-                </td>
-                <td>
-                    <input type="text" id="E3name" placeholder="עברית" />
-                </td>
-                <td>
-                    <input type="text" id="E3nameA" placeholder="ערבית" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    שם משפחה:
-                </td>
-                <td>
-                    <input type="text" id="E3lastName" placeholder="עברית" />
-                </td>
-                <td>
-                    <input type="text" id="E3lastNameA" placeholder="ערבית" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    מין:
-                </td>
-                <td>
-                    <input type="radio" name="E3gender" id="r31" value="זכר" checked> זכר<br>
-                    <input type="radio" name="E3gender" id="r32" value="נקבה"> נקבה<br>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>טלפון:</td>
-                <td><input type="text" id="E3phone" /></td>
-                <td><input type="text" id="E3phone2" /></td>
-            </tr>
-            <tr>
-                <td> טלפון בית:</td>
-                <td><input type="text" id="E3phoneHome" /></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>עיר:</td>
-                <td><input type="text" id="E3city" /></td>
-            </tr>
-            <tr>
-                <td> סוג קשר לחולה:</td>
-                <td>
-                    <input type="radio" name="E3contactType" id="t31" value="הורה" checked> הורה<br>
-                    <input type="radio" name="E3contactType" id="t32" value="דוד או דודה"> דוד או דודה<br>
-                    <input type="radio" name="E3contactType" id="t33" value="אח או אחות"> אח או אחות<br>
-                    <input type="radio" name="E3contactType" id="t34" value="חבר או חברה">חבר או חברה<br>
-                    <input type="radio" name="E3contactType" id="t35" value="בעל">בעל<br>
-                    <input type="radio" name="E3contactType" id="t36" value="אישה"> אישה<br>
-                    <input type="radio" name="E3contactType" id="t37" value="סבא או סבתא">סבא או סבתא<br>
-                    <input type="radio" name="E3contactType" id="t38" value="קרוב משפחה">קרוב משפחה<br>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td> סטטוס:</td>
-                <td>
-                    <input type="radio" name="E3status" id="s31" value="פעיל" checked> פעיל<br>
-                    <input type="radio" name="E3status" id="s32" value="לא פעיל"> לא פעיל<br>
-                </td>
-                <td></td>
-            </tr>
-        </table>
-        
-        
-        
-        
-        
-        <input type="button" onclick="insertpat()" value="ADD" />
-        <div id="insertDiv"></div>
-    </div>
+        <div id="addpat">
+            <h1>הוספת חולה</h1>
+            <table>
+                <tr>
+                    <td>
+                        שם:
+                    </td>
+                    <td>
+                        <input type="text" id="name" placeholder="עברית" />
+                    </td>
+                    <td>
+                        <input type="text" id="nameA" placeholder="ערבית" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        שם משפחה:
+                    </td>
+                    <td>
+                        <input type="text" id="lastName" placeholder="עברית" />
+                    </td>
+                    <td>
+                        <input type="text" id="lastNameA" placeholder="ערבית" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        מין:
+                    </td>
+                    <td>
+                        <input type="radio" name="gender" id="r1" value="זכר" checked> זכר<br>
+                        <input type="radio" name="gender" id="r2" value="נקבה"> נקבה<br>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>טלפון:</td>
+                    <td><input type="text" id="phone" /></td>
+                    <td><input type="text" id="phone2" /></td>
+                </tr>
+                <tr>
+                    <td> טלפון בית:</td>
+                    <td><input type="text" id="phoneHome" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>עיר:</td>
+                    <td><input type="text" id="city" /></td>
+                </tr>
+                <tr>
+                    <td>אזור מגורים:</td>
+                    <td>
+                        <select id="area">
+                            <option value='' disabled selected>בחר אזור מגורים:</option>
+                            <option value="צפון">צפון</option>
+                            <option value="מרכז">מרכז</option>
+                            <option value="דרום">דרום</option>
+                        </select>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>כלי עזר:</td>
+                    <td>
+                        <select id="addition" selected>
+                            <option value="ללא">ללא</option>
+                            <option value="כיסא גלגלים">כיסא גלגלים</option>
+                            <option value="בוסטר">בוסטר</option>
+                            <option value="כיסא תינוק">כיסא תינוק</option>
+                        </select>
+                        <!--<input type="radio" name="addition" id="add" value="ללא" checked> ללא<br>
+                        <input type="radio" name="addition" id="add1" value="כיסא גלגלים"> כיסא גלגלים<br>
+                        <input type="radio" name="addition" id="add2" value="בוסטר"> בוסטר<br>
+                        <input type="radio" name="addition" id="add3" value="כיסא תינוק"> כיסא תינוק<br>-->
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> תאריך יום הולדת:</td>
+                    <td><input type="text" id="birthDate" placeholder="yyyy-mm-dd" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> בית חולים:</td>
+                    <td><input type="text" id="hospital" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>מחלקה:</td>
+                    <td><input type="text" id="department" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>מחסום:</td>
+                    <td><input type="text" id="barrier" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> סטטוס:</td>
+                    <td>
+                        <input type="radio" name="status" id="s1" value="פעיל" checked> פעיל<br>
+                        <input type="radio" name="status" id="s2" value="לא פעיל"> לא פעיל<br>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>היסטוריה רפואית:</td>
+                    <td><input type="text" id="history" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>הערות:</td>
+                    <td><input type="text" id="remarks" /></td>
+                    <td></td>
+                </tr>
+
+            </table>
+            <div style="float:right"></div>
+            <h1>הוספת מלווה 1</h1>
+            <table>
+                <tr>
+                    <td>
+                        שם:
+                    </td>
+                    <td>
+                        <input type="text" id="E1name" placeholder="עברית" />
+                    </td>
+                    <td>
+                        <input type="text" id="E1nameA" placeholder="ערבית" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        שם משפחה:
+                    </td>
+                    <td>
+                        <input type="text" id="E1lastName" placeholder="עברית" />
+                    </td>
+                    <td>
+                        <input type="text" id="E1lastNameA" placeholder="ערבית" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        מין:
+                    </td>
+                    <td>
+                        <input type="radio" name="E1gender" id="r11" value="זכר" checked> זכר<br>
+                        <input type="radio" name="E1gender" id="r12" value="נקבה"> נקבה<br>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>טלפון:</td>
+                    <td><input type="text" id="E1phone" /></td>
+                    <td><input type="text" id="E1phone2" /></td>
+                </tr>
+                <tr>
+                    <td> טלפון בית:</td>
+                    <td><input type="text" id="E1phoneHome" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>עיר:</td>
+                    <td><input type="text" id="E1city" /></td>
+                </tr>
+                <tr>
+                    <td> סוג קשר לחולה:</td>
+                    <td>
+                        <input type="radio" name="E1contactType" id="t11" value="הורה" checked> הורה<br>
+                        <input type="radio" name="E1contactType" id="t12" value="דוד או דודה"> דוד או דודה<br>
+                        <input type="radio" name="E1contactType" id="t13" value="אח או אחות"> אח או אחות<br>
+                        <input type="radio" name="E1contactType" id="t14" value="חבר או חברה">חבר או חברה<br>
+                        <input type="radio" name="E1contactType" id="t15" value="בעל">בעל<br>
+                        <input type="radio" name="E1contactType" id="t16" value="אישה"> אישה<br>
+                        <input type="radio" name="E1contactType" id="t17" value="סבא או סבתא">סבא או סבתא<br>
+                        <input type="radio" name="E1contactType" id="t18" value="קרוב משפחה">קרוב משפחה<br>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> סטטוס:</td>
+                    <td>
+                        <input type="radio" name="E1status" id="s11" value="פעיל" checked> פעיל<br>
+                        <input type="radio" name="E1status" id="s12" value="לא פעיל"> לא פעיל<br>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            <h1>הוספת מלווה 2</h1>
+            <table>
+                <tr>
+                    <td>
+                        שם:
+                    </td>
+                    <td>
+                        <input type="text" id="E2name" placeholder="עברית" />
+                    </td>
+                    <td>
+                        <input type="text" id="E2nameA" placeholder="ערבית" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        שם משפחה:
+                    </td>
+                    <td>
+                        <input type="text" id="E2lastName" placeholder="עברית" />
+                    </td>
+                    <td>
+                        <input type="text" id="E2lastNameA" placeholder="ערבית" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        מין:
+                    </td>
+                    <td>
+                        <input type="radio" name="E2gender" id="r21" value="זכר" checked> זכר<br>
+                        <input type="radio" name="E2gender" id="r22" value="נקבה"> נקבה<br>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>טלפון:</td>
+                    <td><input type="text" id="E2phone" /></td>
+                    <td><input type="text" id="E2phone2" /></td>
+                </tr>
+                <tr>
+                    <td> טלפון בית:</td>
+                    <td><input type="text" id="E2phoneHome" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>עיר:</td>
+                    <td><input type="text" id="E2city" /></td>
+                </tr>
+                <tr>
+                    <td> סוג קשר לחולה:</td>
+                    <td>
+                        <input type="radio" name="E2contactType" id="t21" value="הורה" checked> הורה<br>
+                        <input type="radio" name="E2contactType" id="t22" value="דוד או דודה"> דוד או דודה<br>
+                        <input type="radio" name="E2contactType" id="t23" value="אח או אחות"> אח או אחות<br>
+                        <input type="radio" name="E2contactType" id="t24" value="חבר או חברה">חבר או חברה<br>
+                        <input type="radio" name="E2contactType" id="t25" value="בעל">בעל<br>
+                        <input type="radio" name="E2contactType" id="t26" value="אישה"> אישה<br>
+                        <input type="radio" name="E2contactType" id="t27" value="סבא או סבתא">סבא או סבתא<br>
+                        <input type="radio" name="E2contactType" id="t28" value="קרוב משפחה">קרוב משפחה<br>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> סטטוס:</td>
+                    <td>
+                        <input type="radio" name="E2status" id="s21" value="פעיל" checked> פעיל<br>
+                        <input type="radio" name="E2status" id="s22" value="לא פעיל"> לא פעיל<br>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            <h1>הוספת מלווה 3</h1>
+            <table>
+                <tr>
+                    <td>
+                        שם:
+                    </td>
+                    <td>
+                        <input type="text" id="E3name" placeholder="עברית" />
+                    </td>
+                    <td>
+                        <input type="text" id="E3nameA" placeholder="ערבית" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        שם משפחה:
+                    </td>
+                    <td>
+                        <input type="text" id="E3lastName" placeholder="עברית" />
+                    </td>
+                    <td>
+                        <input type="text" id="E3lastNameA" placeholder="ערבית" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        מין:
+                    </td>
+                    <td>
+                        <input type="radio" name="E3gender" id="r31" value="זכר" checked> זכר<br>
+                        <input type="radio" name="E3gender" id="r32" value="נקבה"> נקבה<br>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>טלפון:</td>
+                    <td><input type="text" id="E3phone" /></td>
+                    <td><input type="text" id="E3phone2" /></td>
+                </tr>
+                <tr>
+                    <td> טלפון בית:</td>
+                    <td><input type="text" id="E3phoneHome" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>עיר:</td>
+                    <td><input type="text" id="E3city" /></td>
+                </tr>
+                <tr>
+                    <td> סוג קשר לחולה:</td>
+                    <td>
+                        <input type="radio" name="E3contactType" id="t31" value="הורה" checked> הורה<br>
+                        <input type="radio" name="E3contactType" id="t32" value="דוד או דודה"> דוד או דודה<br>
+                        <input type="radio" name="E3contactType" id="t33" value="אח או אחות"> אח או אחות<br>
+                        <input type="radio" name="E3contactType" id="t34" value="חבר או חברה">חבר או חברה<br>
+                        <input type="radio" name="E3contactType" id="t35" value="בעל">בעל<br>
+                        <input type="radio" name="E3contactType" id="t36" value="אישה"> אישה<br>
+                        <input type="radio" name="E3contactType" id="t37" value="סבא או סבתא">סבא או סבתא<br>
+                        <input type="radio" name="E3contactType" id="t38" value="קרוב משפחה">קרוב משפחה<br>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> סטטוס:</td>
+                    <td>
+                        <input type="radio" name="E3status" id="s31" value="פעיל" checked> פעיל<br>
+                        <input type="radio" name="E3status" id="s32" value="לא פעיל"> לא פעיל<br>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+
+
+
+
+
+            <input type="button" onclick="insertpat()" value="ADD" />
+            <div id="insertDiv"></div>
+        </div>
 </body>
 </html>

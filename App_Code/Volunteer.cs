@@ -103,6 +103,39 @@ public class Volunteer
         KnowArabic = _knowArabic;
     }
 
+    public Volunteer(string _displayName, string _firstNameA,string _firstNameH, string _lastNameH , string _lastNameA ,
+    string _cellPhone,string _cellPhone2 , string _homePhone, string _city, string _street ,string _typeVol, string _email ,string _preferDay1 ,
+    string _preferHour1 ,string _preferDay2, string _preferHour2, string _preferDay3 , string _preferHour3, string _preferRoute1 ,string _preferRoute2 ,
+    string _preferRoute3 , string _joinDate, string _statusVolunteer ,string _knowArabic,string _birthdate , string _gender)
+    {
+        DisplayName = _displayName;
+        FirstNameH = _firstNameH;
+        FirstNameA = _firstNameA;
+        LastNameH = _lastNameH;
+        LastNameA = _lastNameA;
+        CellPhone = _cellPhone;
+        CellPhone2 = _cellPhone2;
+        HomePhone = _homePhone;
+        City = _city;
+        Address = _street;
+        Email = _email;
+        Birthdate = _birthdate;
+        JoinDate = _joinDate;
+        Status = _statusVolunteer;
+        Gender = _gender;
+        PreferRoute1 = _preferRoute1;
+        PreferRoute2 = _preferRoute2;
+        PreferRoute3 = _preferRoute3;
+        Day1 = _preferDay1;
+        Hour1 = _preferHour1;
+        Day2 = _preferDay2;
+        Hour2 = _preferHour2;
+        Day3 = _preferDay3;
+        Hour3 = _preferHour3;
+        TypeVol = _typeVol;
+        KnowArabic = _knowArabic;
+    }
+
     public Volunteer(string _firstNameH, string _lastNameH, string _cellPhone)
     {
         FirstNameH = _firstNameH;
@@ -143,5 +176,13 @@ public class Volunteer
         List<Volunteer> listV = new List<Volunteer>();
         listV = dbs.getrespList("RoadDBconnectionString", "Volunteer", resp);
         return listV;
+    }
+
+    public Volunteer geUser(string phoneNumber)
+    {
+        DBservices dbs = new DBservices();
+        Volunteer v= new Volunteer();
+        v = dbs.getUser("RoadDBconnectionString", "Volunteer", phoneNumber);
+        return v;
     }
 }

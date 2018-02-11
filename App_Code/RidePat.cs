@@ -54,7 +54,26 @@ public class RidePat
         Remark = _remark;
         Status = _status;
     }
-
+    public RidePat(int _ridePatNum, Escorted _escorted1, Escorted _escorted2, Escorted _escorted3, Destination _startPlace, Destination _target,
+       string _day, string _date, string _leavingHour, int _quantity, string _addition, string _rideType,
+       Volunteer _coordinator, string _remark, string _status)
+    {
+        RidePatNum = _ridePatNum;
+        Escorted1 = _escorted1;
+        Escorted2 = _escorted2;
+        Escorted3 = _escorted3;
+        StartPlace = _startPlace;
+        Target = _target;
+        Day = _day;
+        Date = _date;
+        LeavingHour = _leavingHour;
+        Quantity = _quantity;
+        Addition = _addition;
+        RideType = _rideType;
+        Coordinator = _coordinator;
+        Remark = _remark;
+        Status = _status;
+    }
     public Patient Pat { get => pat; set => pat = value; }
     public Escorted Escorted1 { get => escorted1; set => escorted1 = value; }
     public Escorted Escorted2 { get => escorted2; set => escorted2 = value; }
@@ -72,6 +91,7 @@ public class RidePat
     public Volunteer Coordinator { get => coordinator; set => coordinator = value; }
     public string Remark { get => remark; set => remark = value; }
     public string Status { get => status; set => status = value; }
+    public int RidePatNum { get => ridePatNum; set => ridePatNum = value; }
 
     public DataTable read()
     {

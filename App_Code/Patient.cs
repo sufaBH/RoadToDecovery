@@ -18,8 +18,8 @@ public class Patient
     string lastNameA;// שם משפחה בערבית
     string birthDate;// תאריך לידה
     string city;//יישוב
-    destination barrier;//מחסום
-    destination hospital;//בית חולים
+    Destination barrier;//מחסום
+    Destination hospital;//בית חולים
     string department;//מחלקה
     string gender;//מין
     int cellPhone;//טלפון נייד
@@ -27,6 +27,7 @@ public class Patient
     int homePhone;//טלפון
     string livingArea;//אזור (מחסום)
     List<Escorted> escortedList;//מלווים
+    List<RidePat> ridePatList;//הסעות חולה
     string addition;//כלי עזר
     string history;//היסטוריה רפואית
     string status;//סטטוס
@@ -59,7 +60,7 @@ public class Patient
 
 
     public Patient(string _firstNameH, string _firstNameA, string _lastNameH, string _lastNameA, int _cellPhone, int _cellPhone1,int _homePhone,
-      string _city, string _gender, string _birthdate,destination _barrier, destination _hospital,
+      string _city, string _gender, string _birthdate, Destination _barrier, Destination _hospital,
       string _department, string _area, string _status, string _addition,string _history, string _remarks)
     {
         FirstNameH = _firstNameH;
@@ -82,6 +83,30 @@ public class Patient
         History = _history;
     }
 
+    public Patient(string _displayName,string _firstNameH, string _firstNameA, string _lastNameH, string _lastNameA, int _cellPhone, 
+        int _cellPhone1, int _homePhone, string _city, string _gender, string _birthdate, Destination _barrier, Destination _hospital,
+      string _department, string _area, string _status, string _addition, string _history, string _remarks)
+    {
+        FirstNameH = _firstNameH;
+        LastNameH = _lastNameH;
+        FirstNameA = _firstNameA;
+        LastNameA = _lastNameA;
+        CellPhone = _cellPhone;
+        CellPhone1 = _cellPhone1;
+        HomePhone = _homePhone;
+        City = _city;
+        Gender = _gender;
+        BirthDate = _birthdate;
+        Barrier = _barrier;
+        Hospital = _hospital;
+        Department = _department;
+        LivingArea = _area;
+        Status = _status;
+        Addition = _addition;
+        Remarks = _remarks;
+        History = _history;
+    }
+
     public int Id { get => id; set => id = value; }
     public string FirstNameH { get => firstNameH; set => firstNameH = value; }
     public string FirstNameA { get => firstNameA; set => firstNameA = value; }
@@ -95,13 +120,15 @@ public class Patient
     public string City { get => city; set => city = value; }
     public string Department { get => department; set => department = value; }
     public string History { get => history; set => history = value; }
-    public destination Barrier { get => barrier; set => barrier = value; }
-    public destination Hospital { get => hospital; set => hospital = value; }
+    public Destination Barrier { get => barrier; set => barrier = value; }
+    public Destination Hospital { get => hospital; set => hospital = value; }
     public int HomePhone { get => homePhone; set => homePhone = value; }
     public string DisplayName { get => displayName; set => displayName = value; }
     public string BirthDate { get => birthDate; set => birthDate = value; }
     public int CellPhone1 { get => cellPhone1; set => cellPhone1 = value; }
     public string Remarks { get => remarks; set => remarks = value; }
+    public List<RidePat> RidePatList { get => ridePatList; set => ridePatList = value; }
+    public List<Escorted> EscortedList { get => escortedList; set => escortedList = value; }
 
     public DataTable read()
     {
@@ -133,5 +160,16 @@ public class Patient
         string addition;
         addition = dbs.getAdditionOfPatient("RoadDBconnectionString", "Patient", displayName);
         return addition;
+    }
+
+
+    public Patient gePatient(string phoneNumber)
+    {
+        DBservices dbs = new DBservices();
+        Patient p = new Patient();
+        p = dbs.getPatient("RoadDBconnectionString", "Patient", phoneNumber);
+        p.RidePatList= dbs.getRideList("RoadDBconnectionString", "Patient", phoneNumber);
+        p.EscortedList = dbs.getEscortedList("RoadDBconnectionString", "Patient", phoneNumber);
+        return p;
     }
 }

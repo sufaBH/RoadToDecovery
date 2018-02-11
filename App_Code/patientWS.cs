@@ -80,4 +80,17 @@ public class patientWS : System.Web.Services.WebService
         return jsonString;
 
     }
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string gePatient(string phoneNumber)
+    {
+        Patient p = new Patient();
+        p = p.gePatient(phoneNumber);
+        JavaScriptSerializer js = new JavaScriptSerializer();
+        // serialize to string
+        string jsonString = js.Serialize(p);
+        return jsonString;
+
+    }
 }

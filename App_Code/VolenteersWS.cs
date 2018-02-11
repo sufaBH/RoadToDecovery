@@ -67,4 +67,17 @@ public class VolenteersWS : System.Web.Services.WebService
         return jsonString;
 
     }
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public string geUser(string phoneNumber)
+    {
+        Volunteer v = new Volunteer();
+        v = v.geUser(phoneNumber);
+        JavaScriptSerializer js = new JavaScriptSerializer();
+        // serialize to string
+        string jsonString = js.Serialize(v);
+        return jsonString;
+
+    }
 }

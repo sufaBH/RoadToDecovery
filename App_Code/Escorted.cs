@@ -40,7 +40,23 @@ public class Escorted
         ContactType = _contactType;
         Gender = _gender;
     }
+         public Escorted(string _displayName, string _firstNameH, string _firstNameA, string _lastNameH, string _lastNameA,
+         int _cellPhone, int _cellPhone2, int _homePhone, string _addrees, string _status, string _contactType, string _gender)
+    {
 
+        DisplayName = _displayName;
+        FirstNameA = _firstNameA;
+        FirstNameH = _firstNameH;
+        LastNameA = _lastNameA;
+        LastNameH = _lastNameH;
+        Addrees = _addrees;
+        CellPhone = _cellPhone;
+        CellPhone2 = _cellPhone2;
+        HomePhone = _homePhone;
+        Status = _status;
+        ContactType = _contactType;
+        Gender = _gender;
+    }
     public Escorted()
     {
         //
@@ -54,6 +70,11 @@ public class Escorted
         FirstNameH = _firstNameH;
         LastNameH = _lastNameH;
         CellPhone = _cellPhone;
+    }
+
+    public Escorted(string _displayname)
+    {
+        DisplayName = _displayname;
     }
     public string FirstNameH { get => firstNameH; set => firstNameH = value; }
     public string FirstNameA { get => firstNameA; set => firstNameA = value; }
